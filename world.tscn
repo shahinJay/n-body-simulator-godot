@@ -1,0 +1,95 @@
+[gd_scene load_steps=5 format=3 uid="uid://cdblkh26l2ode"]
+
+[ext_resource type="Texture2D" uid="uid://m7g45ytamlxr" path="res://assets/simple_body_sprite.png" id="1_f3sb7"]
+
+[sub_resource type="GDScript" id="GDScript_fj7yv"]
+script/source = "extends Node2D
+
+
+@onready var sun = $sun
+@onready var earth = $earth
+@onready var moon = $moon
+
+const sunPos = Vector2(500,350)
+const sunRad = 0.5
+const sunMass = 7000
+
+const G = 500
+
+@export var initial_pos = Vector2(500,80)
+@export var initial_vel = Vector2(80,100)
+var earthMass = 500
+var moonMass = 5
+
+var vel: Vector2
+
+@export var m_initial_pos = Vector2(500,80)
+@export var m_initial_vel = Vector2(80,100)
+var m_vel: Vector2
+
+
+
+func _ready() -> void:
+	sun.global_position = sunPos
+	sun.scale = Vector2(sunRad, sunRad)
+	earth.global_position = initial_pos
+	var dir = (earth.global_position - sunPos).normalized()
+	#initial_vel = Vector2(-dir.y,dir.x)*sqrt((G*sunMass)/earth.global_position.distance_to(sunPos))
+	vel = initial_vel
+	
+	moon.global_position = m_initial_pos
+	var m_dir = (moon.global_position - earth.global_position).normalized()
+	m_initial_vel = Vector2(-m_dir.y,m_dir.x)*sqrt((G*earthMass)/moon.global_position.distance_to(earth.global_position))
+	m_vel = m_initial_vel
+
+func sim_earth(delta):
+	var dist = earth.global_position.distance_to(sunPos)
+	var dir = (earth.global_position - sunPos).normalized()
+	var accel = dir*(-G*sunMass)/(dist*dist) 
+	
+	vel += accel * delta
+	earth.global_position += vel *delta #EU-f***ing-REKA! we made it work ..!
+	earth.rotation = dir.angle()
+
+func sim_moon(delta):
+	var dist = moon.global_position.distance_to(earth.global_position)
+	var dir = (moon.global_position - earth.global_position).normalized()
+	var accel = dir*(-G*earthMass)/(dist*dist) 
+	
+	m_vel += accel * delta
+	moon.global_position += m_vel *delta #EU-f***ing-REKA! we made it work ..!
+	moon.rotation = dir.angle()
+	
+
+func _process(delta: float) -> void:
+	
+	
+	sim_earth(delta)
+	sim_moon(delta)
+	print(moon.global_position)
+"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tlwt5"]
+load_path = "res://.godot/imported/earth.png-b790fa2fbb36e0da65275cb97291436e.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_aqk2v"]
+load_path = "res://.godot/imported/moon.png-e4c6172be07b31c7ae536c1ad9030dad.ctex"
+
+[node name="world" type="Node2D"]
+script = SubResource("GDScript_fj7yv")
+initial_vel = Vector2(50, 80)
+m_initial_pos = Vector2(556.565, 103.445)
+
+[node name="earth" type="Sprite2D" parent="."]
+position = Vector2(121.99998, 362)
+scale = Vector2(0.09, 0.09)
+texture = SubResource("CompressedTexture2D_tlwt5")
+
+[node name="sun" type="Sprite2D" parent="."]
+texture = ExtResource("1_f3sb7")
+
+[node name="moon" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(187.99998, 348.99997)
+scale = Vector2(0.035, 0.035)
+texture = SubResource("CompressedTexture2D_aqk2v")

@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://kutcx5y8n230"]
+
+[ext_resource type="Script" uid="uid://bnbyf11s5lhpc" path="res://scripts/space.gd" id="1_d5lh8"]
+[ext_resource type="PackedScene" uid="uid://ipin8rig4i1t" path="res://body.tscn" id="2_81phd"]
+
+[node name="space" type="Node2D"]
+script = ExtResource("1_d5lh8")
+G = 400
+
+[node name="body" parent="." instance=ExtResource("2_81phd")]
+position = Vector2(432, 320)
+pos = Vector2(300, 200)
+mass = 10000.0
+
+[node name="body2" parent="." instance=ExtResource("2_81phd")]
+position = Vector2(548, 213)
+pos = Vector2(400, 400)
+velo = Vector2(40, -40)
+mass = 100.0
+
+[node name="body3" parent="." instance=ExtResource("2_81phd")]
+position = Vector2(479, 173)
+pos = Vector2(900, 100)
+velo = Vector2(5, 20)
+mass = 200.0
+
+[node name="Line2D" type="Line2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
