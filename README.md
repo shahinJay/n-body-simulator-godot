@@ -1,5 +1,7 @@
 # n-body-simulator-godot
 
+# The simulation uses semi-implicit (symplectic) Euler integration for N-body gravitational behaviours in Godot
+
 # Short Story
 This little project started as a test playground for numerical integration, for a physics-based sandbox game I'm working on. 
 The game required simplified realistic orbital physics. 
@@ -7,7 +9,8 @@ Since, Godot's in-built physics for RigidBody2d did not cut it (Orbits were high
 I had to try different methods of integration. 
 Using RK4 or Verlet for the force application for Rigidbody2d objects did not work, Therefore I had to think about controlling and updating the positions of the bodies myself. 
 
-Recently, I had discovered a little trick that can make orbits stable by updating the velocity of a body first instead of its position (https://www.youtube.com/watch?v=nCg3aXn5F3M&list=LL&index=9&pp=gAQBiAQBsAgC), which made me create this test project. 
+Recently, I had discovered a better numerically stable integration approach that solves the orbital instabilities by updating the velocity of a body first instead of its position (Semi-implicit Euler)
+(https://www.youtube.com/watch?v=nCg3aXn5F3M&list=LL&index=9&pp=gAQBiAQBsAgC), which made me create this test project. 
 I tested the method out and it worked almost flawlessly. 
 Orbits were now highly stable. 
 
